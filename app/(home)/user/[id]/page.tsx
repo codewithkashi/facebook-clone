@@ -1,7 +1,6 @@
 "use client";
 import { EditModel, ImageUpload, PostCard } from "@components";
 import useCurrentUser from "@hooks/useCurrentUser";
-import usePost from "@hooks/usePost";
 import useProfileUser from "@hooks/useProfileUser";
 import userUserPosts from "@hooks/useUserPosts";
 import axios from "axios";
@@ -11,7 +10,6 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { BiSolidCamera } from "react-icons/bi";
-import { RiAccountCircleFill } from "react-icons/ri";
 const Page = ({ params }: { params: { id: string } }) => {
   const { data: userData, isLoading, mutate } = useProfileUser(params.id);
   const { data: authUser, mutate: mutateAuth } = useCurrentUser();

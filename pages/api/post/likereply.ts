@@ -1,4 +1,6 @@
+import Notification from "@models/Notification";
 import Reply from "@models/Reply";
+import User from "@models/User";
 import { connectToDB } from "@utils/db";
 import serverAuth from "@utils/serverAuth";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -21,6 +23,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const reply = await Reply.findByIdAndUpdate(
         id,
         { $pull: { likes: currentUser?.id } },
+        { new: true }
+      );
+
+      const notf = await Notification.create({
+        user: reply?.creator,
+        imgUrl: currentUser?.profileImage,
+        desc: `${currentUser?.name} liked on your comment`,
+        url: `/post/${reply?.postId}`,
+      });
+
+      await User.findByIdAndUpdate(
+        reply?.creator,
+        { $push: { notifications: notf._id } },
         { new: true }
       );
       if (!reply) return res.status(404).json("Invalid comment id");

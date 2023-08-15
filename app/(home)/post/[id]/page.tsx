@@ -2,14 +2,16 @@
 import useCurrentUser from "@hooks/useCurrentUser";
 import usePost from "@hooks/usePost";
 import axios from "axios";
-import React, { useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { AiFillCloseCircle, AiOutlineClose } from "react-icons/ai";
 import { FaComments } from "react-icons/fa";
 import { VscSend } from "react-icons/vsc";
-import { CommentCard } from "@components";
+import { CommentCard, Profile } from "@components";
 import { useRouter } from "next/navigation";
 import EmojiPicker from "emoji-picker-react";
+import Image from "next/image";
+import { formatDistanceToNowStrict } from "date-fns";
 const CommentModel = ({ params }: { params: { id: string } }) => {
   const {
     data: post,
@@ -59,8 +61,40 @@ const CommentModel = ({ params }: { params: { id: string } }) => {
       setLoading(false);
     }
   };
+
+  const createdAt = useMemo(() => {
+    if (!post?.createdAt) {
+      return null;
+    }
+
+    return formatDistanceToNowStrict(new Date(post.createdAt));
+  }, [post?.createdAt]);
   return (
     <div className="relative flex flex-col justify-between px-4 lg:w-[50%] w-[100%] pb-20 pt-4">
+      <div className="flex items-start gap-3 py-4">
+        <Profile id={post?.creator._id} imgUrl={post?.creator?.profileImage} />
+        <div className="">
+          <p className="text-black font-semibold text-sm lg:text-base">
+            {post?.creator?.name}
+          </p>
+          <p className="text-xs font-semibold lg:text-sm text-gray-700">
+            {createdAt}
+          </p>
+        </div>
+      </div>
+
+      <p className="py-2 text-sm lg:text-base">{post?.desc}</p>
+      <div className="py-1">
+        {post?.imgUrl && (
+          <Image
+            src={post.imgUrl}
+            alt="photo"
+            width={800}
+            height={800}
+            className="w-full"
+          />
+        )}
+      </div>
       <div
         className="fixed top-28 lg:top-16 right-4 lg:right-[30%] hover:cursor-pointer"
         onClick={() => router.back()}
@@ -68,7 +102,7 @@ const CommentModel = ({ params }: { params: { id: string } }) => {
         <AiFillCloseCircle className="text-gray-500" size={24} />
       </div>
       {post?.comments.length > 0 ? (
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5 pt-4">
           {post?.comments.map((e: Record<string, any>, index: number) => (
             <CommentCard
               data={e}

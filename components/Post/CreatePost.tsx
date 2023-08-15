@@ -9,7 +9,7 @@ const CreatePost = () => {
       <Profile id={user?._id} imgUrl={user?.profileImage} />
       <div className=" flex items-center gap-2 w-full">
         <div className="w-full bg-gray-100 rounded-full text-gray-600 py-2 px-4 text-sm lg:text-base">
-          Whats on your mind Kashif?
+          {`Whats on your mind ${user?.name}?`}
         </div>
         <Image src={"/photo.png"} alt="photo" width={30} height={36} />
       </div>

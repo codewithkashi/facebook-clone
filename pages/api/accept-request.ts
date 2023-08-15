@@ -1,3 +1,4 @@
+import Notification from "@models/Notification";
 import User from "@models/User";
 import serverAuth from "@utils/serverAuth";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -26,6 +27,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await User.findByIdAndUpdate(
       id,
       { $push: { friends: currentUser?._id } },
+      { new: true }
+    );
+
+    const notf = await Notification.create({
+      user: id,
+      imgUrl: currentUser?.profileImage,
+      desc: `${currentUser?.name} accepted your request`,
+      url: `/user/${currentUser?._id}`,
+    });
+
+    await User.findByIdAndUpdate(
+      id,
+      { $push: { notifications: notf._id } },
       { new: true }
     );
     if (!user) return res.status(404).json("Invalid user id");

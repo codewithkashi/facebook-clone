@@ -49,7 +49,7 @@ const ReplyCard = ({
 
   return (
     <div className="flex gap-2 px-3 my-3 ml-2 lg:ml-8">
-      <Profile id={user?._id} imgUrl={user?.profileImage} />
+      <Profile id={data.creator?._id} imgUrl={data.creator?.profileImage} />
       <div className="">
         <div className="flex flex-col  rounded-xl bg-zinc-300 px-4 py-1">
           <p className="text-black font-semibold text-sm lg:text-base">

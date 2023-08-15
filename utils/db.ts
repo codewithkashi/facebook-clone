@@ -3,6 +3,7 @@ import Post from "@models/Post";
 import Reply from "@models/Reply";
 import User from "@models/User";
 import mongoose from "mongoose";
+import Notification from "@models/Notification";
 let inConnected = false;
 const connectToDB = async () => {
   try {
@@ -15,6 +16,7 @@ const connectToDB = async () => {
     await Post.findOne();
     await Comment.findOne();
     await Reply.findOne();
+    await Notification.findOne();
     inConnected = true;
   } catch (error: any) {
     console.log(`Failed to connect to Database: ${error.message}`);

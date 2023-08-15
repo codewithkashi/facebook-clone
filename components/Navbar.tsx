@@ -8,17 +8,25 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import Link from "next/link";
 import { Profile } from "./";
 import { usePathname } from "next/navigation";
+import useNotifications from "@hooks/useNotifications";
+import useCurrentUser from "@hooks/useCurrentUser";
 
-const navLinks = [
-  { icon: AiFillHome, path: "/" },
-  { icon: LiaUserFriendsSolid, path: "/friends" },
-  { icon: HiOutlineUserGroup, path: "/groups" },
-  { icon: IoMdNotificationsOutline, path: "/notifications" },
-];
 const Navbar = () => {
   const [searchText, setSearchText] = useState("");
   const handleSearch = () => {};
   const pathname = usePathname();
+  const { data: user } = useCurrentUser();
+
+  const navLinks = [
+    { icon: AiFillHome, path: "/" },
+    { icon: LiaUserFriendsSolid, path: "/friends" },
+    { icon: HiOutlineUserGroup, path: "/groups" },
+    {
+      icon: IoMdNotificationsOutline,
+      path: "/notifications",
+      notifications: user?.notifications,
+    },
+  ];
   return (
     <div className="bg-[#e9ebee] flex flex-col lg:flex-row items-start lg:items-center justify-between px-4 lg:px-16 py-2 shadow-md sticky top-0 z-50">
       <div className="flex items-center gap-4">
@@ -56,13 +64,18 @@ const Navbar = () => {
         {navLinks.map((e, index) => (
           <div
             key={index}
-            className={`border-b-2 pb-2 ${
+            className={`realtive border-b-2 pb-2 ${
               pathname === e.path ? "border-[#1B74E4]" : "border-transparent"
             } transition-all px-4 lg:px-8 mx-1`}
           >
             <Link href={e.path}>
               <e.icon className="text-gray-700 " size={28} />
             </Link>
+            {e?.notifications?.length > 0 && (
+              <div className="w-4 h-4 text-xs text-white font-semibold flex justify-center items-center bg-red-600 rounded-full absolute top-16 lg:top-3 z-50">
+                {e.notifications.length}
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -70,7 +83,7 @@ const Navbar = () => {
         <button className="px-3 py-2 bg-gray-300 rounded-full text-black font-semibold w-[130px]">
           Find Friends
         </button>
-        <Profile />
+        <Profile imgUrl={user?.profileImage} id={user?._id} />
       </div>
     </div>
   );

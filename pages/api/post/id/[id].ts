@@ -38,6 +38,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           },
         ],
       },
+      {
+        path: "creator",
+        select: "_id name profileImage",
+      },
     ]);
     res.status(200).json(post);
   } catch (error) {

@@ -1,4 +1,6 @@
+import Notification from "@models/Notification";
 import Post from "@models/Post";
+import User from "@models/User";
 import { connectToDB } from "@utils/db";
 import serverAuth from "@utils/serverAuth";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -14,6 +16,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         { $push: { likes: currentUser?.id } },
         { new: true }
       );
+
+      const notf = await Notification.create({
+        user: post?.creator,
+        imgUrl: currentUser?.profileImage,
+        desc: `${currentUser?.name} liked your post`,
+        url: `/post/${post?._id}`,
+      });
+      await User.findByIdAndUpdate(
+        post?.creator,
+        { $push: { notifications: notf._id } },
+        { new: true }
+      );
+
       if (!post) return res.status(404).json("Invalid post id");
       return res.status(200).json("Success");
     }

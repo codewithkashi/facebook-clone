@@ -1,16 +1,19 @@
 "use client";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { RiAccountCircleFill } from "react-icons/ri";
-const Profile = ({ id, imgUrl }: { id: string; imgUrl?: string }) => {
+const Profile = ({ id, imgUrl }: { id?: string; imgUrl?: string }) => {
   const router = useRouter();
-  const goToProfile = () => {};
   return (
-    <div>
-      <RiAccountCircleFill
-        size={40}
+    <div className="w-10 h-10 rounded-full overflow-hidden hover:cursor-pointer">
+      <Image
+        width={40}
+        height={40}
+        src={imgUrl || "/profile.png"}
+        alt="avtar"
         onClick={() => router.push(`/user/${id}`)}
-        className="text-gray-500 hover:cursor-pointer"
+        className="bg-cover"
       />
     </div>
   );
