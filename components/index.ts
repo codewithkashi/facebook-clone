@@ -14,6 +14,10 @@ import PostInteractions from "./Post/PostInteractions";
 import UserInteraction from "./Post/UserInteraction";
 import CommentCard from "./Post/CommentCard";
 import ReplyCard from "./Post/ReplyCard";
+import EditModel from "./EditModel";
+import SentRequests from "./User/SentRequests";
+import ReceivedRequests from "./User/ReceivedRequests";
+import Avatar from "./User/Avatar";
 export {
   Input,
   Navbar,
@@ -31,4 +35,8 @@ export {
   UserInteraction,
   CommentCard,
   ReplyCard,
+  EditModel,
+  ReceivedRequests,
+  SentRequests,
+  Avatar,
 };

@@ -14,7 +14,7 @@ const PostInteractions = ({
     let totalComments = 0;
     totalComments += post?.comments?.length || 0;
     post?.comments?.forEach((element: any) => {
-      totalComments += element.replies.length || 0;
+      totalComments += element?.replies?.length || 0;
     });
     return totalComments;
   }
