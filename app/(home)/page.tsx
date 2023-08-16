@@ -24,9 +24,8 @@ const Home = () => {
   }, []);
   return (
     <div className="relative w-full lg:w-[50%]">
-      <div className="" onClick={() => router.push("/create-post")}>
-        <CreatePost />
-      </div>
+      <CreatePost />
+
       {posts &&
         posts.map((e: Record<string, any>) => (
           <PostCard

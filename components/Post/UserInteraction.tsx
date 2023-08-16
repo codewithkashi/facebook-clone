@@ -6,6 +6,7 @@ import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 import { FaRegCommentAlt } from "react-icons/fa";
 import { PiShareFatDuotone } from "react-icons/pi";
 import { useRouter } from "next/navigation";
+// import LikeSound from "/like.mp3"
 const UserInteraction = ({
   post,
   mutatePosts,
@@ -18,6 +19,7 @@ const UserInteraction = ({
   mutateUser: any;
 }) => {
   const [open, setOpen] = useState(false);
+  const audioElement = new Audio("/like.mp3");
   const router = useRouter();
   const likePost = async () => {
     try {
@@ -28,7 +30,10 @@ const UserInteraction = ({
         if (response.status == 200) toast.success(response.data);
       } else {
         const response = await axios.post("/api/post/like", { id: post?._id });
-        if (response.status == 200) toast.success(response.data);
+        if (response.status == 200) {
+          toast.success(response.data);
+          audioElement.play();
+        }
       }
       mutatePosts();
     } catch (error: any) {

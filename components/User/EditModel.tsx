@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import { Input } from "./";
+import { Input } from "..";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
@@ -20,7 +20,8 @@ const EditModel = ({
     if (bio.current && data.bio) bio.current.value = data?.bio;
   }, [data]);
 
-  const updateProfile = async () => {
+  const updateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       const response = await axios.post("/api/update-profile", {
         name: name.current?.value,

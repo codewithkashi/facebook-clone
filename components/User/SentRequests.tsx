@@ -2,6 +2,7 @@ import React from "react";
 import { Avatar } from "../";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import Link from "next/link";
 
 const SentRequests = ({
   data,
@@ -30,7 +31,12 @@ const SentRequests = ({
     <div className="flex items-start gap-3">
       <Avatar imgUrl={data?.profileImage} id={data?._id} />
       <div className="flex flex-col justify-center">
-        <p className="font-semibold text-sm lg:text-base">{data?.name}</p>
+        <Link
+          href={`/user/${data?._id}`}
+          className="font-semibold text-sm lg:text-base"
+        >
+          {data?.name}
+        </Link>
         <button
           onClick={manageRequst}
           className="px-4 bg-blue-700 my-4 text-white disabled:text-gray-300 hover:cursor-pointer hover:bg-blue-800 transition-colors py-1 rounded-lg font-semibold"

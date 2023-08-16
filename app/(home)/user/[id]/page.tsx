@@ -1,5 +1,14 @@
 "use client";
-import { EditModel, ImageUpload, PostCard } from "@components";
+import {
+  AcceptRequestButton,
+  AddFriendButton,
+  DeleteRequestButton,
+  EditButton,
+  EditModel,
+  ImageUpload,
+  PostCard,
+  UnFriendButton,
+} from "@components";
 import useCurrentUser from "@hooks/useCurrentUser";
 import useProfileUser from "@hooks/useProfileUser";
 import userUserPosts from "@hooks/useUserPosts";
@@ -59,45 +68,6 @@ const Page = ({ params }: { params: { id: string } }) => {
     }
   };
 
-  const addFriend = async () => {
-    try {
-      if (authUser?.sentRequests?.includes(userData?._id)) {
-        const response = await axios.delete("/api/friend", {
-          data: { id: userData?._id },
-        });
-        if (response.status == 200) {
-          toast.success(response.data);
-          mutate();
-          mutateAuth();
-        }
-      } else {
-        const response = await axios.post("/api/friend", { id: userData?._id });
-        if (response.status == 200) {
-          toast.success(response.data);
-          mutate();
-          mutateAuth();
-        }
-      }
-    } catch (error: any) {
-      toast.error(error.response.data);
-      console.log(error);
-    }
-  };
-  const unFriend = async () => {
-    try {
-      const response = await axios.post("/api/unfriend", {
-        id: userData?._id,
-      });
-      if (response.status == 200) {
-        toast.success(response.data);
-        mutate();
-        mutateAuth();
-      }
-    } catch (error: any) {
-      toast.error(error.response.data);
-      console.log(error);
-    }
-  };
   useEffect(() => {
     const user = async () => {
       const data = await getSession();
@@ -106,35 +76,6 @@ const Page = ({ params }: { params: { id: string } }) => {
     };
     user();
   }, [userData]);
-  const acceptRequest = async () => {
-    try {
-      const response = await axios.post("/api/accept-request", {
-        id: userData?._id,
-      });
-      if (response.status == 200) {
-        toast.success(response.data);
-        mutate();
-        mutateAuth();
-      }
-    } catch (error: any) {
-      toast.error(error.response.data);
-    }
-  };
-
-  const deleteRequest = async () => {
-    try {
-      const response = await axios.post("/api/delete-request", {
-        id: userData?._id,
-      });
-      if (response.status == 200) {
-        toast.success(response.data);
-        mutate();
-        mutateAuth();
-      }
-    } catch (error: any) {
-      toast.error(error.response.data);
-    }
-  };
   return (
     <div className="w-full lg:w-[50%] py-4 px-4 lg:px-16">
       <div className="relative">
@@ -222,47 +163,37 @@ const Page = ({ params }: { params: { id: string } }) => {
         </p>
         <p className="text-sm lg:text-base font-[400]">{userData?.bio}</p>
         {myProfile ? (
-          <button
-            onClick={() => setEdit(true)}
-            className="w-[50%] bg-blue-700 my-4 text-white disabled:text-gray-300 hover:cursor-pointer hover:bg-blue-800 transition-colors py-2 rounded-lg font-semibold"
-          >
-            Edit
-          </button>
+          <EditButton setEdit={setEdit} />
         ) : (
           <>
             {authUser?.friends.includes(userData?._id) ? (
-              <button
-                onClick={unFriend}
-                className="w-[50%] bg-blue-700 my-4 text-white disabled:text-gray-300 hover:cursor-pointer hover:bg-blue-800 transition-colors py-2 rounded-lg font-semibold"
-              >
-                Friends
-              </button>
+              <UnFriendButton
+                mutate={mutate}
+                mutateAuth={mutateAuth}
+                userData={userData}
+              />
             ) : (
               <>
                 {authUser?.receivedRequests.includes(userData?._id) ? (
                   <div className=" felx items-center justify-start">
-                    <button
-                      onClick={acceptRequest}
-                      className="w-[30%] bg-blue-700 my-4 text-white disabled:text-gray-300 hover:cursor-pointer hover:bg-blue-800 transition-colors py-2 rounded-lg font-semibold"
-                    >
-                      Confirm
-                    </button>
-                    <button
-                      onClick={deleteRequest}
-                      className="w-[30%] mx-4 bg-blue-700 my-4 text-white disabled:text-gray-300 hover:cursor-pointer hover:bg-blue-800 transition-colors py-2 rounded-lg font-semibold"
-                    >
-                      Remove
-                    </button>
+                    <AcceptRequestButton
+                      mutate={mutate}
+                      mutateAuth={mutateAuth}
+                      userData={userData}
+                    />
+                    <DeleteRequestButton
+                      mutate={mutate}
+                      mutateAuth={mutateAuth}
+                      userData={userData}
+                    />
                   </div>
                 ) : (
-                  <button
-                    onClick={addFriend}
-                    className="w-[50%] bg-blue-700 my-4 text-white disabled:text-gray-300 hover:cursor-pointer hover:bg-blue-800 transition-colors py-2 rounded-lg font-semibold"
-                  >
-                    {authUser?.sentRequests?.includes(userData?._id)
-                      ? "Requested"
-                      : "Add Friend"}
-                  </button>
+                  <AddFriendButton
+                    authUser={authUser}
+                    mutate={mutate}
+                    mutateAuth={mutateAuth}
+                    userData={userData}
+                  />
                 )}
               </>
             )}

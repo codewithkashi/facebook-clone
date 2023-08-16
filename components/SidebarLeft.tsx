@@ -3,18 +3,22 @@ import React from "react";
 import { Profile } from "./";
 import Image from "next/image";
 import useCurrentUser from "@hooks/useCurrentUser";
+import Link from "next/link";
 const leftSidebarItems = [
   {
     label: "Find Friends",
     icon: "/friends.png",
+    url: "/friends",
   },
   {
     label: "Groups",
     icon: "/groups.png",
+    url: "/groups",
   },
   {
     label: "Saved",
     icon: "/saved.png",
+    url: "/saved",
   },
 ];
 
@@ -30,7 +34,8 @@ const SidebarLeft = () => {
       </div>
       <div className="flex flex-col gap-6">
         {leftSidebarItems.map((e, index) => (
-          <div
+          <Link
+            href={e.url}
             key={index}
             className="flex flex-row items-center gap-2 hover:cursor-pointer"
           >
@@ -41,7 +46,7 @@ const SidebarLeft = () => {
               height={30}
             />
             <p className="text-gray-700 font-semibold">{e.label}</p>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

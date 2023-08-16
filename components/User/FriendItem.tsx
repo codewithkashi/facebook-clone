@@ -1,5 +1,5 @@
 import React from "react";
-import { Profile } from "./";
+import { Profile } from "..";
 const FriendItem = () => {
   return (
     <div className="flex items-center gap-2 hover:cursor-pointer">

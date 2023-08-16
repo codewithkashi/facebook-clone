@@ -5,9 +5,11 @@ import React from "react";
 import { RiAccountCircleFill } from "react-icons/ri";
 const Avatar = ({ id, imgUrl }: { id: string; imgUrl?: string }) => {
   const router = useRouter();
-  const goToProfile = () => {};
   return (
-    <div>
+    <div
+      onClick={() => router.push(`/user/${id}`)}
+      className="hover:cursor-pointer"
+    >
       {imgUrl ? (
         <div className="h-20 w-20 rounded-full overflow-hidden">
           <Image
@@ -21,7 +23,6 @@ const Avatar = ({ id, imgUrl }: { id: string; imgUrl?: string }) => {
       ) : (
         <RiAccountCircleFill
           size={80}
-          onClick={() => router.push(`/user/${id}`)}
           className="text-gray-500 hover:cursor-pointer"
         />
       )}
