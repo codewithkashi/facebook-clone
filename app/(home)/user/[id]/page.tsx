@@ -9,6 +9,7 @@ import {
   PostCard,
   UnFriendButton,
 } from "@components";
+import { PostCardSkelton, UserProfileSkelton } from "@components/Skeltons";
 import useCurrentUser from "@hooks/useCurrentUser";
 import useProfileUser from "@hooks/useProfileUser";
 import userUserPosts from "@hooks/useUserPosts";
@@ -78,142 +79,152 @@ const Page = ({ params }: { params: { id: string } }) => {
   }, [userData]);
   return (
     <div className="w-full lg:w-[50%] py-4 px-4 lg:px-16">
-      <div className="relative">
-        {myProfile && (
-          <BiSolidCamera
-            onClick={() => {
-              setOpen(true);
-              setIsProfile(false);
-            }}
-            size={32}
-            className="text-black bg-gray-400 rounded-full p-1 absolute top-12 right-8 lg:right-20 hover:cursor-pointer"
-          />
-        )}
-        <div className="w-full h-[160px] sm:h-[200px] md:h-[240px] lg:h-[280px] bg-gray-300 overflow-hidden">
-          {userData?.coverImage && (
-            <Image
-              width={800}
-              height={300}
-              src={userData?.coverImage}
-              alt="profile"
-              className="w-full min-h-full"
-            />
-          )}
-          <div className="absolute w-24 flex justify-center items-center rounded-full -bottom-4 lg:-bottom-8 overflow-hidden h-24 lg:w-36 lg:h-36 bg-gray-500 lg:left-12 left-6">
-            <Image
-              width={200}
-              height={200}
-              src={userData?.profileImage || "/profile.png"}
-              alt="profile"
-              className="min-w-full min-h-full"
-            />
-
+      {isLoading ? (
+        <>
+          <UserProfileSkelton />
+          <PostCardSkelton />
+        </>
+      ) : (
+        <>
+          <div className="relative">
             {myProfile && (
               <BiSolidCamera
                 onClick={() => {
                   setOpen(true);
-                  setIsProfile(true);
+                  setIsProfile(false);
                 }}
                 size={32}
-                className="text-black bg-gray-400 rounded-full p-1 absolute bottom-0  right-[30%] z-20 hover:cursor-pointer"
+                className="text-black bg-gray-400 rounded-full p-1 absolute top-12 right-8 lg:right-20 hover:cursor-pointer"
               />
             )}
-          </div>
-        </div>
+            <div className="w-full h-[160px] sm:h-[200px] md:h-[240px] lg:h-[280px] bg-gray-300 overflow-hidden">
+              {userData?.coverImage && (
+                <Image
+                  width={800}
+                  height={300}
+                  src={userData?.coverImage}
+                  alt="profile"
+                  className="w-full min-h-full"
+                />
+              )}
+              <div className="absolute w-24 flex justify-center items-center rounded-full -bottom-4 lg:-bottom-8 overflow-hidden h-24 lg:w-36 lg:h-36 bg-gray-500 lg:left-12 left-6">
+                <Image
+                  width={200}
+                  height={200}
+                  src={userData?.profileImage || "/profile.png"}
+                  alt="profile"
+                  className="min-w-full min-h-full"
+                />
 
-        {open && (
-          <div className="absolute top-4 left-0 w-[95%] bg-gray-300 z-40 scale-up-ver-bottom py-8">
-            <ImageUpload
-              label="Add photo"
-              base64={base64 || ""}
-              setBase64={setBase64}
-              isProfile={isProfile}
-            />
-            <div className="flex items-center gap-4 mx-4 lg:mx-16 pb-4">
-              <button
-                onClick={updateProfilePic}
-                disabled={loading}
-                className="bg-blue-700 text-white disabled:text-gray-300 hover:cursor-pointer transition-all font-semibold w-full rounded-xl mt-4 py-2"
-              >
-                Save
-              </button>
-              <button
-                onClick={() => {
-                  setOpen(false);
-                  setBase64("");
-                }}
-                className="bg-blue-700 text-white font-semibold w-full rounded-xl mt-4 py-2 hover:cursor-pointer transition-all"
-              >
-                Cancel
-              </button>
+                {myProfile && (
+                  <BiSolidCamera
+                    onClick={() => {
+                      setOpen(true);
+                      setIsProfile(true);
+                    }}
+                    size={32}
+                    className="text-black bg-gray-400 rounded-full p-1 absolute bottom-0  right-[30%] z-20 hover:cursor-pointer"
+                  />
+                )}
+              </div>
             </div>
-          </div>
-        )}
-      </div>
 
-      <div className="pt-12 pb-8 px-2 lg:px-8 flex flex-col gap-1">
-        <p className="text-black text-lg lg:text-2xl font-semibold ">
-          {userData?.name}
-        </p>
-        <p className="flex items-center gap-2 text-gray-700 text-sm lg:text-base">
-          <span className="text-black font-semibold">
-            {userData?.friends?.length || 0}
-          </span>
-          Friends
-        </p>
-        <p className="text-sm lg:text-base font-[400]">{userData?.bio}</p>
-        {myProfile ? (
-          <EditButton setEdit={setEdit} />
-        ) : (
-          <>
-            {authUser?.friends.includes(userData?._id) ? (
-              <UnFriendButton
-                mutate={mutate}
-                mutateAuth={mutateAuth}
-                userData={userData}
-              />
+            {open && (
+              <div className="absolute top-4 left-0 w-[95%] bg-gray-300 z-40 scale-up-ver-bottom py-8">
+                <ImageUpload
+                  label="Add photo"
+                  base64={base64 || ""}
+                  setBase64={setBase64}
+                  isProfile={isProfile}
+                />
+                <div className="flex items-center gap-4 mx-4 lg:mx-16 pb-4">
+                  <button
+                    onClick={updateProfilePic}
+                    disabled={loading}
+                    className="bg-blue-700 text-white disabled:text-gray-300 hover:cursor-pointer transition-all font-semibold w-full rounded-xl mt-4 py-2"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={() => {
+                      setOpen(false);
+                      setBase64("");
+                    }}
+                    className="bg-blue-700 text-white font-semibold w-full rounded-xl mt-4 py-2 hover:cursor-pointer transition-all"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="pt-12 pb-8 px-2 lg:px-8 flex flex-col gap-1">
+            <p className="text-black text-lg lg:text-2xl font-semibold ">
+              {userData?.name}
+            </p>
+            <p className="flex items-center gap-2 text-gray-700 text-sm lg:text-base">
+              <span className="text-black font-semibold">
+                {userData?.friends?.length || 0}
+              </span>
+              Friends
+            </p>
+            <p className="text-sm lg:text-base font-[400]">{userData?.bio}</p>
+            {myProfile ? (
+              <EditButton setEdit={setEdit} />
             ) : (
               <>
-                {authUser?.receivedRequests.includes(userData?._id) ? (
-                  <div className=" felx items-center justify-start">
-                    <AcceptRequestButton
-                      mutate={mutate}
-                      mutateAuth={mutateAuth}
-                      userData={userData}
-                    />
-                    <DeleteRequestButton
-                      mutate={mutate}
-                      mutateAuth={mutateAuth}
-                      userData={userData}
-                    />
-                  </div>
-                ) : (
-                  <AddFriendButton
-                    authUser={authUser}
+                {authUser?.friends.includes(userData?._id) ? (
+                  <UnFriendButton
                     mutate={mutate}
                     mutateAuth={mutateAuth}
                     userData={userData}
                   />
+                ) : (
+                  <>
+                    {authUser?.receivedRequests.includes(userData?._id) ? (
+                      <div className="felx items-center w-full">
+                        <AcceptRequestButton
+                          mutate={mutate}
+                          mutateAuth={mutateAuth}
+                          userData={userData}
+                        />
+                        <DeleteRequestButton
+                          mutate={mutate}
+                          mutateAuth={mutateAuth}
+                          userData={userData}
+                        />
+                      </div>
+                    ) : (
+                      <AddFriendButton
+                        authUser={authUser}
+                        mutate={mutate}
+                        mutateAuth={mutateAuth}
+                        userData={userData}
+                      />
+                    )}
+                  </>
                 )}
               </>
             )}
-          </>
-        )}
-      </div>
-      {edit && (
-        <div className="fixed top-0 left-0 flex justify-center items-center w-screen bg-opacity-80 h-screen scale-up-ver-bottom z-20 bg-gray-900 py-8">
-          <EditModel data={userData} mutate={mutate} setEdit={setEdit} />
-        </div>
-      )}
+          </div>
+          {edit && (
+            <div className="fixed top-0 left-0 flex justify-center items-center w-screen bg-opacity-80 h-screen scale-up-ver-bottom z-20 bg-gray-900 py-8">
+              <EditModel data={userData} mutate={mutate} setEdit={setEdit} />
+            </div>
+          )}
 
-      {userPosts?.map((e: any) => (
-        <PostCard
-          post={e}
-          user={authUser}
-          mutatePosts={mutatePosts}
-          mutateUser={myProfile ? mutateAuth : mutate}
-        />
-      ))}
+          {userPosts?.map((e: any) => (
+            <PostCard
+              key={e._id}
+              post={e}
+              user={authUser}
+              mutatePosts={mutatePosts}
+              mutateUser={myProfile ? mutateAuth : mutate}
+            />
+          ))}
+        </>
+      )}
     </div>
   );
 };

@@ -1,8 +1,10 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Avatar } from "../";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import Link from "next/link";
+import { MdOutlinePersonRemoveAlt1 } from "react-icons/md";
 
 const SentRequests = ({
   data,
@@ -13,9 +15,11 @@ const SentRequests = ({
   userId: string;
   mutateFriends: any;
 }) => {
+  const [loading, setLoading] = useState(false);
   const manageRequst = async () => {
     try {
-      const response = await axios.delete("/api/friend", {
+      setLoading(true);
+      const response = await axios.delete("/api/user/friend", {
         data: { id: data?._id },
       });
       if (response.status == 200) {
@@ -24,13 +28,14 @@ const SentRequests = ({
       }
     } catch (error: any) {
       toast.error(error.response.data);
-      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   return (
-    <div className="flex items-start gap-3">
+    <div className="flex items-start gap-3 py-2">
       <Avatar imgUrl={data?.profileImage} id={data?._id} />
-      <div className="flex flex-col justify-center">
+      <div className="flex flex-col justify-center min-w-[180px]">
         <Link
           href={`/user/${data?._id}`}
           className="font-semibold text-sm lg:text-base"
@@ -39,8 +44,10 @@ const SentRequests = ({
         </Link>
         <button
           onClick={manageRequst}
-          className="px-4 bg-blue-700 my-4 text-white disabled:text-gray-300 hover:cursor-pointer hover:bg-blue-800 transition-colors py-1 rounded-lg font-semibold"
+          className="blue__button"
+          disabled={loading}
         >
+          <MdOutlinePersonRemoveAlt1 />
           Requested
         </button>
       </div>

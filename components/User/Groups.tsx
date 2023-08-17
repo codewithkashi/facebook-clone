@@ -26,7 +26,7 @@ const Groups = () => {
         <p className="text-gray-700 font-semibold py-4">Groups</p>
         {allGroups &&
           allGroups.map((e: Record<string, any>) => (
-            <div className="flex items-start gap-2 py-1">
+            <div className="flex items-start gap-2 py-1" key={e._id}>
               <GroupAvatar id={e._id} imgUrl={e?.imgUrl} />
               <p className="text-sm lg:text-base font-semibold">{e?.title}</p>
             </div>

@@ -2,7 +2,7 @@
 import useCurrentUser from "@hooks/useCurrentUser";
 import usePost from "@hooks/usePost";
 import axios from "axios";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { AiFillCloseCircle, AiOutlineClose } from "react-icons/ai";
 import { FaComments } from "react-icons/fa";
@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import EmojiPicker from "emoji-picker-react";
 import Image from "next/image";
 import { formatDistanceToNowStrict } from "date-fns";
+import { getSession } from "next-auth/react";
 const CommentModel = ({ params }: { params: { id: string } }) => {
   const {
     data: post,
@@ -69,6 +70,14 @@ const CommentModel = ({ params }: { params: { id: string } }) => {
 
     return formatDistanceToNowStrict(new Date(post.createdAt));
   }, [post?.createdAt]);
+
+  useEffect(() => {
+    const user = async () => {
+      const data = await getSession();
+      if (!data?.user?.email) router.push("/login");
+    };
+    user();
+  }, []);
   return (
     <div className="relative flex flex-col justify-between px-4 lg:w-[50%] w-[100%] pb-20 pt-4">
       <div className="flex items-start gap-3 py-4">

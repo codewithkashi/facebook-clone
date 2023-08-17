@@ -2,6 +2,9 @@ import { formatDistanceToNowStrict } from "date-fns";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useMemo } from "react";
+import { BiEdit } from "react-icons/bi";
+import { BsPersonAdd } from "react-icons/bs";
+import { MdOutlinePersonRemoveAlt1 } from "react-icons/md";
 
 const GroupCard = ({
   data,
@@ -39,13 +42,28 @@ const GroupCard = ({
 
         <p className="font-semibold lg:text-xl">{data?.title}</p>
         {authUser?._id === data?.creator ? (
-          <button className="blue__button">Edit</button>
+          <div className="w-[150px]">
+            <button className="blue__button">
+              <BiEdit />
+              Edit
+            </button>
+          </div>
         ) : (
           <>
             {data?.members.includes(authUser?._id) ? (
-              <button className="blue__button">Joined</button>
+              <div className="w-[150px]">
+                <button className="blue__button">
+                  <MdOutlinePersonRemoveAlt1 />
+                  Joined
+                </button>
+              </div>
             ) : (
-              <button className="blue__button">Join</button>
+              <div className="w-[150px]">
+                <button className="blue__button w-[200px] bg-red-500">
+                  <BsPersonAdd />
+                  Join
+                </button>
+              </div>
             )}
           </>
         )}

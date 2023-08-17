@@ -1,7 +1,8 @@
 "use client";
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
+import { BsPersonAdd } from "react-icons/bs";
 
 const AcceptRequestButton = ({
   userData,
@@ -12,9 +13,11 @@ const AcceptRequestButton = ({
   mutate: any;
   mutateAuth: any;
 }) => {
+  const [loading, setLoading] = useState(false);
   const acceptRequest = async () => {
     try {
-      const response = await axios.post("/api/accept-request", {
+      setLoading(true);
+      const response = await axios.post("/api/user/accept-request", {
         id: userData?._id,
       });
       if (response.status == 200) {
@@ -24,11 +27,14 @@ const AcceptRequestButton = ({
       }
     } catch (error: any) {
       toast.error(error.response.data);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <button onClick={acceptRequest} className="blue__button">
+    <button onClick={acceptRequest} className="blue__button" disabled={loading}>
+      <BsPersonAdd />
       Confirm
     </button>
   );

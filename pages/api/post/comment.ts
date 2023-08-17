@@ -1,4 +1,3 @@
-import { connectToDB } from "@utils/db";
 import serverAuth from "@utils/serverAuth";
 import { NextApiRequest, NextApiResponse } from "next";
 import Comment from "@models/Comment";

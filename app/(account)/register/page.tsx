@@ -17,7 +17,6 @@ const Register = () => {
   const router = useRouter();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Hello");
     try {
       setLoading(true);
       const response = await axios.post("/api/register", {
@@ -32,7 +31,6 @@ const Register = () => {
         router.push("/login");
       }
     } catch (error: any) {
-      console.log(error);
       toast.error(error.response.data);
     } finally {
       setLoading(false);

@@ -1,12 +1,18 @@
 "use client";
 import { Profile, ImageUpload } from "@components";
 import axios from "axios";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { AiOutlineArrowLeft, AiOutlineClose } from "react-icons/ai";
+import {
+  AiOutlineArrowLeft,
+  AiOutlineClose,
+  AiOutlineLoading,
+  AiOutlinePlus,
+} from "react-icons/ai";
 import EmojiPicker from "emoji-picker-react";
 import useCurrentUser from "@hooks/useCurrentUser";
+import { getSession } from "next-auth/react";
 
 const Page = () => {
   const router = useRouter();
@@ -14,8 +20,11 @@ const Page = () => {
   const [desc, setDesc] = useState("");
   const [showEmoji, setShowEmoji] = useState(false);
   const { data: user } = useCurrentUser();
+  const [isLoading, setIsLoading] = useState(false);
+  const searchParams = useSearchParams();
   const createPost = async () => {
     try {
+      setIsLoading(true);
       let picRes;
       if (!base64 && !desc) return toast.error("Post can't be empty");
       if (base64) {
@@ -24,10 +33,11 @@ const Page = () => {
           return toast.error("Too big picture");
         }
       }
-      const response = await axios.post("/api/create-post", {
+      const response = await axios.post("/api/post/create-post", {
         desc,
         imgUrl: picRes?.data.secure_url,
-        forGroup: false,
+        groupId: searchParams?.get("groupId"),
+        forGroup: searchParams?.get("forGroup"),
       });
       if (response.status == 201) {
         toast.success(response.data);
@@ -35,8 +45,18 @@ const Page = () => {
       }
     } catch (error: any) {
       toast.error(error.response.data);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const user = async () => {
+      const data = await getSession();
+      if (!data?.user?.email) router.push("/login");
+    };
+    user();
+  }, []);
   return (
     <div className="flex flex-col w-full lg:w-[50%] py-4 px-4 lg:px-16">
       <div className="flex gap-2 items-center pb-4 border-b-[1px] border-gray-300">
@@ -97,9 +117,15 @@ const Page = () => {
       </div>
       <button
         onClick={createPost}
-        className="mx-4 py-2 rounded-md lg:mx-16 my-4 text-white font-semibold bg-[#1a6ed8] hover:bg-[#1a6ed9] transition-all"
+        className="blue__button"
+        disabled={isLoading}
       >
-        Post
+        {isLoading ? (
+          <AiOutlineLoading className="text-white animate-spin" />
+        ) : (
+          <AiOutlinePlus className="text-white" />
+        )}
+        {isLoading ? "Posting" : "Post"}
       </button>
     </div>
   );

@@ -1,12 +1,10 @@
 import User from "@models/User";
-import { connectToDB } from "@utils/db";
 import serverAuth from "@utils/serverAuth";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "GET") return res.status(405).json("bad request");
   try {
-    await connectToDB();
     const { currentUser } = (await serverAuth(req, res)) as Record<string, any>;
     const user = await User.findById(currentUser._id)
       .populate({

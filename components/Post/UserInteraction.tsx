@@ -6,7 +6,7 @@ import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 import { FaRegCommentAlt } from "react-icons/fa";
 import { PiShareFatDuotone } from "react-icons/pi";
 import { useRouter } from "next/navigation";
-// import LikeSound from "/like.mp3"
+import { ShareModel } from "@components";
 const UserInteraction = ({
   post,
   mutatePosts,
@@ -61,10 +61,16 @@ const UserInteraction = ({
         <p className="text-gray-700 text-sm lg:text-base">Comment</p>
       </div>
 
-      <div className="flex items-center gap-2 hover:cursor-pointer">
+      <div
+        className="flex items-center gap-2 hover:cursor-pointer"
+        onClick={() => setOpen(true)}
+      >
         <PiShareFatDuotone size={24} className="text-gray-700" />
         <p className="text-gray-700 text-sm lg:text-base">Share</p>
       </div>
+      {open && (
+        <ShareModel setOpen={setOpen} post={post} mutatePost={mutatePosts} />
+      )}
     </div>
   );
 };

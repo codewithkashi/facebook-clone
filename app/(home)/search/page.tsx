@@ -1,8 +1,10 @@
 "use client";
 import { Avatar } from "@components";
 import axios from "axios";
+import { getSession } from "next-auth/react";
 import Link from "next/link";
-import React, { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { AiOutlineSearch } from "react-icons/ai";
 interface ISearch {
@@ -13,6 +15,7 @@ interface ISearch {
 const Page = () => {
   const searchText = useRef<HTMLInputElement | null>(null);
   const [data, setData] = useState<ISearch[] | null>(null);
+  const router = useRouter();
   const handlerSearch = async () => {
     if (!searchText) return toast.error("Type something to search");
     try {
@@ -22,6 +25,14 @@ const Page = () => {
       if (response.status == 200) setData(response.data);
     } catch (error) {}
   };
+
+  useEffect(() => {
+    const user = async () => {
+      const data = await getSession();
+      if (!data?.user?.email) router.push("/login");
+    };
+    user();
+  }, []);
   return (
     <div className="w-full lg:w-[50%] px-4 lg:px-16 py-4">
       <div className="bg-white rounded-full py-2 px-4 mx-8 lg:mx-16 flex items-center gap-2">

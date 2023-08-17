@@ -8,7 +8,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { currentUser } = (await serverAuth(req, res)) as Record<string, any>;
     const { id } = req.body;
-    console.log(`Group ID is ${id}`);
     const leaved = await Group.findByIdAndUpdate(id, {
       $pull: { members: currentUser?._id },
     });

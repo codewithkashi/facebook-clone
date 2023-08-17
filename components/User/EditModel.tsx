@@ -1,8 +1,9 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Input } from "..";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { MdDoneOutline, MdOutlineCancel } from "react-icons/md";
 
 const EditModel = ({
   data,
@@ -15,6 +16,7 @@ const EditModel = ({
 }) => {
   const name = useRef<HTMLInputElement>();
   const bio = useRef<HTMLTextAreaElement | null>(null);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (name.current) name.current.value = data?.name;
     if (bio.current && data.bio) bio.current.value = data?.bio;
@@ -23,6 +25,7 @@ const EditModel = ({
   const updateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const response = await axios.post("/api/update-profile", {
         name: name.current?.value,
         bio: bio.current?.value,
@@ -34,7 +37,8 @@ const EditModel = ({
       }
     } catch (error: any) {
       toast.error(error.response.data);
-      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -47,13 +51,18 @@ const EditModel = ({
           ref={bio}
         />
         <div className="flex items-center gap-4 justify-center">
-          <button className=" bg-blue-700 font-semibold w-[40%] text-white disabled:text-gray-300 hover:cursor-pointer hover:bg-blue-800 transition-colors py-2 rounded-lg">
+          <button
+            className=" bg-blue-700 font-semibold w-[40%] text-white disabled:text-gray-300 hover:cursor-pointer hover:bg-blue-800 transition-colors py-2 rounded-lg flex justify-center items-center gap-2"
+            disabled={loading}
+          >
+            <MdDoneOutline />
             Save
           </button>
           <button
             onClick={() => setEdit(false)}
-            className=" bg-blue-700 font-semibold w-[40%] text-white disabled:text-gray-300 hover:cursor-pointer hover:bg-blue-800 transition-colors py-2 rounded-lg"
+            className=" bg-blue-700 font-semibold w-[40%] text-white disabled:text-gray-300 hover:cursor-pointer hover:bg-blue-800 transition-colors py-2 rounded-lg flex justify-center items-center gap-2"
           >
+            <MdOutlineCancel />
             Cancel
           </button>
         </div>

@@ -1,19 +1,33 @@
 "use client";
 import { ImageUpload, Input } from "@components";
 import axios from "axios";
+import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
-import { AiOutlineArrowLeft, AiOutlineClose } from "react-icons/ai";
-import useCurrentUser from "@hooks/useCurrentUser";
+import {
+  AiOutlineArrowLeft,
+  AiOutlineClose,
+  AiOutlineLoading,
+  AiOutlinePlus,
+} from "react-icons/ai";
 
 const Page = () => {
+  useEffect(() => {
+    const user = async () => {
+      const data = await getSession();
+      if (!data?.user?.email) router.push("/login");
+    };
+    user();
+  }, []);
   const router = useRouter();
   const [base64, setBase64] = useState<string | null>(null);
   const title = useRef<HTMLInputElement | null>(null);
   const desc = useRef<HTMLTextAreaElement | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const createGroup = async () => {
     try {
+      setIsLoading(true);
       let picRes;
       if (!base64 || !desc || !title) return toast.error("Fill all data");
       if (base64) {
@@ -29,10 +43,12 @@ const Page = () => {
       });
       if (response.status == 201) {
         toast.success(response.data);
-        router.push("/");
+        router.push("/groups");
       }
     } catch (error: any) {
       toast.error(error.response.data);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -68,9 +84,15 @@ const Page = () => {
       </div>
       <button
         onClick={createGroup}
-        className="mx-4 py-2 rounded-md lg:mx-16 my-4 text-white font-semibold bg-[#1a6ed8] hover:bg-[#1a6ed9] transition-all"
+        className="blue__button"
+        disabled={isLoading}
       >
-        Create
+        {isLoading ? (
+          <AiOutlineLoading className="text-white animate-spin" />
+        ) : (
+          <AiOutlinePlus className="text-white" />
+        )}
+        {isLoading ? "Creating" : "Create"}
       </button>
     </div>
   );

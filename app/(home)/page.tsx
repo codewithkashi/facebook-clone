@@ -1,19 +1,19 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { CreatePost, PostCard } from "@components";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import useAllPosts from "@hooks/useAllPosts";
 import useCurrentUser from "@hooks/useCurrentUser";
+import { CreatePostSkelton, PostCardSkelton } from "@components/Skeltons";
 
 const Home = () => {
   const {
     data: posts,
-    error: postError,
     isLoading: postLoading,
     mutate: mutatePosts,
   } = useAllPosts();
-  const { data: user, error, isLoading, mutate: mutateUser } = useCurrentUser();
+  const { data: user, isLoading, mutate: mutateUser } = useCurrentUser();
   const router = useRouter();
   useEffect(() => {
     const user = async () => {
@@ -24,18 +24,27 @@ const Home = () => {
   }, []);
   return (
     <div className="relative w-full lg:w-[50%]">
-      <CreatePost />
+      {!isLoading ? <CreatePost forGroup={false} /> : <CreatePostSkelton />}
 
-      {posts &&
-        posts.map((e: Record<string, any>) => (
-          <PostCard
-            post={e}
-            key={e.id}
-            mutatePosts={mutatePosts}
-            user={user}
-            mutateUser={mutateUser}
-          />
-        ))}
+      {!postLoading ? (
+        <>
+          {posts &&
+            posts.map((e: Record<string, any>) => (
+              <PostCard
+                post={e}
+                key={e._id}
+                mutatePosts={mutatePosts}
+                user={user}
+                mutateUser={mutateUser}
+              />
+            ))}
+        </>
+      ) : (
+        <>
+          <PostCardSkelton />
+          <PostCardSkelton />
+        </>
+      )}
     </div>
   );
 };

@@ -3,7 +3,13 @@ import useCurrentUser from "@hooks/useCurrentUser";
 import { Profile } from "..";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-const CreatePost = () => {
+const CreatePost = ({
+  forGroup,
+  groupId,
+}: {
+  forGroup: boolean;
+  groupId?: string;
+}) => {
   const { data: user } = useCurrentUser();
   const router = useRouter();
   return (
@@ -11,7 +17,11 @@ const CreatePost = () => {
       <Profile id={user?._id} imgUrl={user?.profileImage} />
       <div
         className=" flex items-center gap-2 w-full"
-        onClick={() => router.push("/create-post")}
+        onClick={() =>
+          router.push(
+            `/create-post?forGroup=${forGroup}&groupId=${groupId || ""}`
+          )
+        }
       >
         <div className="w-full bg-gray-100 rounded-full text-gray-600 py-2 px-4 text-sm lg:text-base">
           {`Whats on your mind ${user?.name || ""}?`}

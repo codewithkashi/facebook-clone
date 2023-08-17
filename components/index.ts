@@ -28,6 +28,9 @@ import EditButton from "./User/EditButton";
 import EditGroupModel from "./Group/EditGroupModel";
 import GroupCard from "./Group/GroupCard";
 import GroupAvatar from "./GroupAvatar";
+import ShareModel from "./Post/ShareModel";
+import CreatorProfile from "./Profiles/CreatorProfile";
+import GroupProfile from "./Profiles/GroupProfile";
 export {
   Input,
   Navbar,
@@ -59,4 +62,7 @@ export {
   EditGroupModel,
   GroupCard,
   GroupAvatar,
+  ShareModel,
+  CreatorProfile,
+  GroupProfile,
 };

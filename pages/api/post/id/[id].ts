@@ -1,12 +1,10 @@
 import Post from "@models/Post";
-import { connectToDB } from "@utils/db";
 import serverAuth from "@utils/serverAuth";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "GET") res.status(405).json("bad request");
   try {
-    await connectToDB();
     await serverAuth(req, res);
     const { id } = req.query;
 

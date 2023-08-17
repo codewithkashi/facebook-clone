@@ -1,8 +1,6 @@
 "use client";
 import React from "react";
 import { AddFriendButton, Avatar } from "../";
-import { toast } from "react-hot-toast";
-import axios from "axios";
 
 const FindFriends = ({
   authUser,
@@ -16,9 +14,9 @@ const FindFriends = ({
   mutateAuth: any;
 }) => {
   return (
-    <div className="flex items-start gap-3">
+    <div className="flex items-start gap-3 py-4 border-b-[1px] border-gray-300">
       <Avatar imgUrl={userData?.profileImage} id={userData?._id} />
-      <div className="flex flex-col justify-center">
+      <div className="flex flex-col justify-center min-w-[180px]">
         <p className="font-semibold text-sm lg:text-base">{userData?.name}</p>
 
         <AddFriendButton

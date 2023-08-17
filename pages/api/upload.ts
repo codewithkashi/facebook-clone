@@ -10,6 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") return res.status(405).json("bad request");
   const { path } = req.body;
   try {
+    await serverAuth(req, res);
     if (path) {
       const options = {
         use_filename: true,

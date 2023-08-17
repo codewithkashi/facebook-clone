@@ -1,7 +1,8 @@
 "use client";
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
+import { MdOutlinePersonRemoveAlt1 } from "react-icons/md";
 
 const UnFriendButton = ({
   userData,
@@ -12,9 +13,11 @@ const UnFriendButton = ({
   mutate: any;
   mutateAuth: any;
 }) => {
+  const [loading, setLoading] = useState(false);
   const unFriend = async () => {
     try {
-      const response = await axios.post("/api/unfriend", {
+      setLoading(true);
+      const response = await axios.post("/api/user/unfriend", {
         id: userData?._id,
       });
       if (response.status == 200) {
@@ -24,11 +27,13 @@ const UnFriendButton = ({
       }
     } catch (error: any) {
       toast.error(error.response.data);
-      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   return (
-    <button onClick={unFriend} className="blue__button">
+    <button onClick={unFriend} className="blue__button" disabled={loading}>
+      <MdOutlinePersonRemoveAlt1 />
       Friends
     </button>
   );

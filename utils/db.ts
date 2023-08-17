@@ -4,6 +4,8 @@ import Reply from "@models/Reply";
 import User from "@models/User";
 import mongoose from "mongoose";
 import Notification from "@models/Notification";
+import Group from "@models/Group";
+import Saved from "@models/Saved";
 let inConnected = false;
 const connectToDB = async () => {
   try {
@@ -17,6 +19,8 @@ const connectToDB = async () => {
     await Comment.findOne();
     await Reply.findOne();
     await Notification.findOne();
+    await Group.findOne();
+    await Saved.findOne();
     inConnected = true;
   } catch (error: any) {
     console.log(`Failed to connect to Database: ${error.message}`);

@@ -1,13 +1,11 @@
 import Comment from "@models/Comment";
 import Notification from "@models/Notification";
 import User from "@models/User";
-import { connectToDB } from "@utils/db";
 import serverAuth from "@utils/serverAuth";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    await connectToDB();
     const { currentUser } = (await serverAuth(req, res)) as Record<string, any>;
     const { id } = req.body;
     if (req.method === "POST") {

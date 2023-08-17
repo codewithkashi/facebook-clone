@@ -1,7 +1,8 @@
+"use client";
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-
+import { CiCircleRemove } from "react-icons/ci";
 const DeleteRequestButton = ({
   userData,
   mutate,
@@ -11,9 +12,11 @@ const DeleteRequestButton = ({
   mutate: any;
   mutateAuth: any;
 }) => {
+  const [loading, setLoading] = useState(false);
   const deleteRequest = async () => {
     try {
-      const response = await axios.post("/api/delete-request", {
+      setLoading(true);
+      const response = await axios.post("/api/user/delete-request", {
         id: userData?._id,
       });
       if (response.status == 200) {
@@ -23,10 +26,13 @@ const DeleteRequestButton = ({
       }
     } catch (error: any) {
       toast.error(error.response.data);
+    } finally {
+      setLoading(false);
     }
   };
   return (
-    <button onClick={deleteRequest} className="blue__button">
+    <button onClick={deleteRequest} className="blue__button" disabled={loading}>
+      <CiCircleRemove />
       Delete
     </button>
   );

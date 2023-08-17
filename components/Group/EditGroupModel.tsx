@@ -1,9 +1,11 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Input } from "..";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-
+import { AiOutlineLoading } from "react-icons/ai";
+import { MdDoneOutline } from "react-icons/md";
+import { ImCancelCircle } from "react-icons/im";
 const EditGroupModel = ({
   data,
   mutate,
@@ -15,13 +17,14 @@ const EditGroupModel = ({
 }) => {
   const title = useRef<HTMLInputElement>();
   const desc = useRef<HTMLTextAreaElement | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     if (title.current) title.current.value = data?.title;
     if (desc.current && data.desc) desc.current.value = data?.desc;
   }, [data]);
   const updateGroup = async () => {
-    console.log(title.current?.value, desc.current?.value, data?._id);
     try {
+      setIsLoading(true);
       const response = await axios.post("/api/group/update-data", {
         title: title.current?.value,
         desc: desc.current?.value,
@@ -34,7 +37,8 @@ const EditGroupModel = ({
       }
     } catch (error: any) {
       toast.error(error.response.data);
-      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -47,16 +51,16 @@ const EditGroupModel = ({
           ref={desc}
         />
         <div className="flex items-center gap-4 justify-center">
-          <button
-            onClick={updateGroup}
-            className=" bg-blue-700 font-semibold w-[40%] text-white disabled:text-gray-300 hover:cursor-pointer hover:bg-blue-800 transition-colors py-2 rounded-lg"
-          >
-            Update
+          <button onClick={updateGroup} className=" blue__button">
+            {isLoading ? (
+              <AiOutlineLoading className="text-white animate-spin" />
+            ) : (
+              <MdDoneOutline className="text-white" />
+            )}
+            {isLoading ? "Updating" : "Update"}
           </button>
-          <button
-            onClick={() => setEdit(false)}
-            className=" bg-blue-700 font-semibold w-[40%] text-white disabled:text-gray-300 hover:cursor-pointer hover:bg-blue-800 transition-colors py-2 rounded-lg"
-          >
+          <button onClick={() => setEdit(false)} className="blue__button">
+            <ImCancelCircle />
             Cancel
           </button>
         </div>

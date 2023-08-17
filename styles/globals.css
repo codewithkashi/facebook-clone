@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .blue__button {
-  @apply bg-blue-700 text-white disabled:text-gray-300 hover:cursor-pointer transition-all font-semibold w-full rounded-xl mt-4 py-1 lg:py-2;
+  @apply flex justify-center items-center gap-2 bg-blue-700 text-white disabled:text-gray-300 hover:cursor-pointer transition-all font-semibold w-full rounded-xl mt-4 py-1 lg:py-2;
 }
 .scale-up-ver-bottom {
   -webkit-animation: scale-up-ver-bottom 0.3s

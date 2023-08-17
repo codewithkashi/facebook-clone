@@ -7,7 +7,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await serverAuth(req, res);
     const { id } = req.query;
-    console.log(id);
     const group = await Group.findById(id);
     if (group) return res.status(200).json(group);
     return res.status(404).json("Invalid group id");
