@@ -7,10 +7,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await serverAuth(req, res);
     const { id } = req.query;
-    const posts = await Post.find({ creator: id }).populate({
-      path: "creator",
-      select: "_id name profileImage",
-    });
+    const posts = await Post.find({ creator: id })
+      .populate({
+        path: "creator",
+        select: "_id name profileImage",
+      })
+      .populate({
+        path: "sharedGroupId",
+        select: "_id title imgUrl",
+      })
+      .populate({
+        path: "sharedCreator",
+        select: "_id name profileImage",
+      })
+      .populate({
+        path: "groupId",
+        select: "_id title imgUrl",
+      });
     if (posts) res.status(200).json(posts);
   } catch (error) {
     res.status(422).json("Intenal server error");
