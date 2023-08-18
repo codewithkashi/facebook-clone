@@ -171,7 +171,6 @@ const CommentModel = ({ params }: { params: { id: string } }) => {
           </>
         )}
       </div>
-      <p className="py-2 text-sm lg:text-base">{post?.desc}</p>
       <div className="py-1">
         {post?.imgUrl && (
           <Image
