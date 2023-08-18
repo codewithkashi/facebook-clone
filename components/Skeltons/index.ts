@@ -4,6 +4,10 @@ import GroupsCardSkelton from "./GroupsCardSkelton";
 import NotificationSkelton from "./NotificationSkelton";
 import GroupPageSkelton from "./GroupPageSkelton";
 import UserProfileSkelton from "./UserProfileSkelton";
+import PostModelSkelton from "./PostModelSkelton";
+import LeftSidebarSkelton from "./LeftSidebarSkelton";
+import SidebarRightGroupSkelton from "./SidebarRightGroupSkelton";
+import SuggestedPeopleSkelton from "./SuggestedPeopleSkelton";
 export {
   CreatePostSkelton,
   PostCardSkelton,
@@ -11,4 +15,8 @@ export {
   NotificationSkelton,
   GroupPageSkelton,
   UserProfileSkelton,
+  PostModelSkelton,
+  LeftSidebarSkelton,
+  SidebarRightGroupSkelton,
+  SuggestedPeopleSkelton,
 };

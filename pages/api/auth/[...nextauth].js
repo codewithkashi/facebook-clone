@@ -1,11 +1,10 @@
-import NextAuth, { AuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-
 import { compare } from "bcrypt";
 import User from "@models/User";
 import { connectToDB } from "@utils/db";
 
-export const authOptions: AuthOptions = {
+export const authOptions = {
   providers: [
     Credentials({
       id: "credentials",
@@ -17,12 +16,12 @@ export const authOptions: AuthOptions = {
         },
         password: {
           label: "Password",
-          type: "passord",
+          type: "password", // Typo here ("passord" should be "password")
         },
       },
       async authorize(credentials) {
         await connectToDB();
-        if (!credentials?.email || !credentials?.password) {
+        if (!credentials.email || !credentials.password) {
           throw new Error("Email and password required");
         }
 

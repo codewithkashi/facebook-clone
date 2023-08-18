@@ -40,6 +40,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         path: "creator",
         select: "_id name profileImage",
       },
+      {
+        path: "groupId",
+        select: "_id title imgUrl",
+      },
+      {
+        path: "sharedCreator",
+        select: "_id name profileImage",
+      },
+      {
+        path: "sharedGroupId",
+        select: "_id title imgUrl",
+      },
     ]);
     res.status(200).json(post);
   } catch (error) {

@@ -66,15 +66,8 @@ const PostCard = ({
                         profileImage={post?.creator?.profileImage}
                         createdAt={createdAt}
                       />
-                      <p className="text-sm lg:text-base flex">
-                        - shared
-                        <Link
-                          href={`/group/${post?.sharedGroupId?._id}`}
-                          className="ml-1 text-gray-700 font-semibold"
-                        >
-                          {post?.sharedGroupId?.title}
-                        </Link>
-                        's post
+                      <p className="text-sm lg:text-base ">
+                        shared {post?.sharedGroupId?.title} 's post
                       </p>
                     </div>
                     <p className="my-4 mx-2 text-sm lg:text-base">
@@ -110,15 +103,8 @@ const PostCard = ({
                         createdAt={createdAt}
                       />
 
-                      <p className="text-sm lg:text-base flex">
-                        - shared
-                        <Link
-                          href={`/user/${post?.sharedCreator?._id}`}
-                          className="ml-1 text-gray-700 font-semibold"
-                        >
-                          {post?.sharedCreator?.name}
-                        </Link>
-                        's post
+                      <p className="text-sm lg:text-base">
+                        shared {post?.sharedCreator?.name} post
                       </p>
                     </div>
                     <p className="my-4 mx-2 text-sm lg:text-base">

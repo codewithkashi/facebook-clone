@@ -1,3 +1,4 @@
+import Group from "@models/Group";
 import Post from "@models/Post";
 import serverAuth from "@utils/serverAuth";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -15,6 +16,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       sharedDesc,
       sharedGroupId,
     } = req.body;
+    if (forGroup && !groupId) return res.status(404).json("Group not found");
+    const foundGroup = await Group.findById(groupId);
+    if (!foundGroup) return res.status(404).json("Group not found");
+    if (!foundGroup?.members?.includes(currentUser?._id))
+      return res.status(404).json("Join Group to Post");
     await Post.create({
       creator: currentUser.id,
       desc,

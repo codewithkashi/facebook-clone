@@ -7,7 +7,12 @@ import { toast } from "react-hot-toast";
 import { AiFillCloseCircle, AiOutlineClose } from "react-icons/ai";
 import { FaComments } from "react-icons/fa";
 import { VscSend } from "react-icons/vsc";
-import { CommentCard, Profile } from "@components";
+import {
+  CommentCard,
+  CreatorProfile,
+  GroupProfile,
+  Profile,
+} from "@components";
 import { useRouter } from "next/navigation";
 import EmojiPicker from "emoji-picker-react";
 import Image from "next/image";
@@ -80,18 +85,92 @@ const CommentModel = ({ params }: { params: { id: string } }) => {
   }, []);
   return (
     <div className="relative flex flex-col justify-between px-4 lg:w-[50%] w-[100%] pb-20 pt-4">
-      <div className="flex items-start gap-3 py-4">
-        <Profile id={post?.creator._id} imgUrl={post?.creator?.profileImage} />
-        <div className="">
-          <p className="text-black font-semibold text-sm lg:text-base">
-            {post?.creator?.name}
-          </p>
-          <p className="text-xs font-semibold lg:text-sm text-gray-700">
-            {createdAt}
-          </p>
-        </div>
-      </div>
+      <div className="flex gap-2 w-full">
+        {post?.forGroup ? (
+          <>
+            {post?.groupId ? (
+              <GroupProfile
+                creatorId={post?.creator?._id}
+                creatorName={post?.creator?.name}
+                profileImage={post?.creator?.profileImage}
+                groupId={post?.groupId?._id}
+                groupImgUrl={post?.groupId?.imgUrl}
+                groupTitle={post?.groupId?.title}
+                createdAt={createdAt}
+              />
+            ) : (
+              <div className="flex flex-col gap-3 w-full">
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-4">
+                    <CreatorProfile
+                      id={post?.creator?._id}
+                      name={post?.creator?.name}
+                      profileImage={post?.creator?.profileImage}
+                      createdAt={createdAt}
+                    />
+                    <p className="text-sm lg:text-base ">
+                      shared {post?.sharedGroupId?.title} 's post
+                    </p>
+                  </div>
+                  <p className="my-4 mx-2 text-sm lg:text-base">{post?.desc}</p>
+                </div>
+                <div className="flex flex-col gap-2 ml-4 lg:ml-8 border-t-[1px] border-gray-500 pt-2 w-full">
+                  <GroupProfile
+                    creatorId={post?.sharedCreator?._id}
+                    creatorName={post?.sharedCreator?.name}
+                    profileImage={post?.sharedCreator?.profileImage}
+                    groupId={post?.sharedGroupId?._id}
+                    groupImgUrl={post?.sharedGroupId?.imgUrl}
+                    groupTitle={post?.sharedGroupId?.title}
+                  />
+                  <p className="my-4 mx-2 text-sm lg:text-base">
+                    {post?.sharedDesc}
+                  </p>
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            {post?.sharedCreator ? (
+              <div className="flex flex-col gap-3 w-full">
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-3">
+                    <CreatorProfile
+                      id={post?.creator?._id}
+                      name={post?.creator?.name}
+                      profileImage={post?.creator?.profileImage}
+                      createdAt={createdAt}
+                    />
 
+                    <p className="text-sm lg:text-base">
+                      shared {post?.sharedCreator?.name} post
+                    </p>
+                  </div>
+                  <p className="my-4 mx-2 text-sm lg:text-base">{post?.desc}</p>
+                </div>
+                <div className="flex flex-col gap-2 ml-4 lg:ml-8 border-t-[1px] border-gray-500 pt-2 w-full">
+                  <CreatorProfile
+                    id={post?.sharedCreator?._id}
+                    name={post?.sharedCreator?.name}
+                    profileImage={post?.sharedCreator?.profileImage}
+                  />
+                  <p className="my-4 mx-2 text-sm lg:text-base">
+                    {post?.sharedDesc}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <CreatorProfile
+                id={post?.creator?._id}
+                name={post?.creator?.name}
+                profileImage={post?.creator?.profileImage}
+                createdAt={createdAt}
+              />
+            )}
+          </>
+        )}
+      </div>
       <p className="py-2 text-sm lg:text-base">{post?.desc}</p>
       <div className="py-1">
         {post?.imgUrl && (
