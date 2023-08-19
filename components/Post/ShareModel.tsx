@@ -24,9 +24,9 @@ const ShareModel = ({
         desc: shareDesc.current?.value,
         imgUrl: post?.imgUrl,
         forGroup: post.forGroup,
-        sharedCreator: post?.creator?._id,
-        sharedDesc: post?.desc,
-        sharedGroupId: post?.groupId?._id,
+        sharedCreator: post?.sharedCreator?._id || post?.creator?._id,
+        sharedDesc: post?.sharedDesc || post?.desc,
+        sharedGroupId: post?.sharedGroupId?._id || post?.groupId?._id,
       });
       if (response.status == 201) {
         toast.success("Post Shared");

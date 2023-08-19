@@ -16,20 +16,31 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       sharedDesc,
       sharedGroupId,
     } = req.body;
-    if (forGroup && !groupId) return res.status(404).json("Group not found");
-    const foundGroup = await Group.findById(groupId);
-    if (!foundGroup) return res.status(404).json("Group not found");
-    if (!foundGroup?.members?.includes(currentUser?._id))
-      return res.status(404).json("Join Group to Post");
+    if (forGroup === true) {
+      if (!groupId && !sharedGroupId) {
+        return res.status(404).json("Group not found");
+      } else {
+        const sharedFoundGroup = await Group.findById(sharedGroupId);
+        const foundGroup = await Group.findById(groupId);
+        if (!foundGroup && !sharedFoundGroup)
+          return res.status(404).json("Group not found");
+        if (
+          !foundGroup?.members?.includes(currentUser?._id) &&
+          !sharedFoundGroup?.members?.includes(currentUser?._id)
+        )
+          return res.status(404).json("Join Group to Post");
+      }
+    }
+
     await Post.create({
       creator: currentUser.id,
       desc,
       imgUrl,
-      groupId,
+      groupId: groupId || null,
       forGroup,
-      sharedCreator,
+      sharedCreator: sharedCreator || null,
       sharedDesc,
-      sharedGroupId,
+      sharedGroupId: sharedGroupId || null,
     });
     res.status(201).json("Post created");
   } catch (error) {
