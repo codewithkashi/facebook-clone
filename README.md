@@ -2,6 +2,10 @@
 
 A full-stack Facebook clone built with Next.js, TypeScript, Tailwind CSS, and MongoDB, featuring various functionalities inspired by the social media giant.
 
+## Live Site URL
+
+[Facebook Clone](https://facebook-clone-nine-nu.vercel.app/)
+
 ## Features
 
 - **User Authentication**: Secure user registration and login using [Next-Auth.js](https://next-auth.js.org/).
@@ -21,8 +25,8 @@ A full-stack Facebook clone built with Next.js, TypeScript, Tailwind CSS, and Mo
 
 1. Clone this repository.
 2. Set up your MongoDB database and configure the environment variables in `.env`.
-3. Navigate to the `client` and `server` directories and run `npm install` to install dependencies.
-4. Run `npm run dev` in both the `client` and `server` directories to start the development server.
+3. `npm install` to install dependencies.
+4. Run `npm run dev` to start the development server.
 
 ## Contributing
 
