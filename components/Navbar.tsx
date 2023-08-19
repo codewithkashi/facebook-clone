@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
+import { MdLogout } from "react-icons/md";
 import {
   AiOutlineSearch,
   AiOutlineHome,
@@ -102,7 +103,17 @@ const Navbar = () => {
         >
           Find Friends
         </Link>
-        <Profile imgUrl={user?.profileImage} id={user?._id} />
+        <div className="flex gap-2 items-center">
+          <Profile
+            imgUrl={user?.profileImage || "/profile.png"}
+            id={user?._id}
+          />
+          <MdLogout
+            size={24}
+            className="text-gray-600 hover:text-gray-700 hover:cursor-pointer"
+            onClick={() => signOut()}
+          />
+        </div>
       </div>
 
       {toggle && (
